@@ -12,6 +12,9 @@ app.use(cors()) // allow cross-origin resource sharing
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
+const aboutRoute = require('./routes/about');
+app.use('/api/about', aboutRoute);
+
 // connect to database
 mongoose
   .connect(`${process.env.DB_CONNECTION_STRING}`)
