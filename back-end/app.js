@@ -12,7 +12,7 @@ app.use(cors()) // allow cross-origin resource sharing
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 
-const aboutRoute = require('./routes/about');
+const aboutRoute = require('./routes/aboutUs');
 app.use('/api/about', aboutRoute);
 
 // connect to database

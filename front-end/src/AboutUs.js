@@ -1,4 +1,3 @@
-// src/AboutUs.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -6,7 +5,7 @@ const AboutUs = () => {
     const [aboutData, setAboutData] = useState({ paragraph: '', imageUrl: '' });
 
     useEffect(() => {
-        axios.get('http://localhost:7002/api/about')
+        axios.get('http://localhost:7002/api/about-us')
             .then(response => {
                 setAboutData(response.data);
             })
@@ -25,3 +24,4 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
