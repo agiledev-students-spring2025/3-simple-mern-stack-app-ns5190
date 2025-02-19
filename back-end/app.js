@@ -3,6 +3,7 @@ const express = require('express') // CommonJS import style!
 const morgan = require('morgan') // middleware for nice logging of incoming HTTP requests
 const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 const mongoose = require('mongoose')
+const path = require('path');
 
 const app = express() // instantiate an Express object
 app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' })) // log all incoming requests, except when in unit test mode.  morgan has a few logging default styles - dev is a nice concise color-coded style
@@ -11,9 +12,6 @@ app.use(cors()) // allow cross-origin resource sharing
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
-
-const aboutRoute = require('./routes/aboutUs');
-app.use('/api/about', aboutRoute);
 
 // connect to database
 mongoose
@@ -24,6 +22,25 @@ mongoose
 // load the dataabase models we want to deal with
 const { Message } = require('./models/Message')
 const { User } = require('./models/User')
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+app.get('/about-us', async (req, res) => {
+  // load all messages from database
+  try {
+    const messages = await Message.find({})
+    res.json({
+      paragraph: "Hello! I'm Nabiha. My interests include traveling, volleyball, badminton, graphic design, architecture, and photography. I currently attend NYU Tandon School of Engineering as a computer science major and business management minor. At Tandon, I am involved in the Metaverse for Education team, the General Engineering department, the Society of Asian Engineers and Scientists (SASE), and the Global Leaders and Scholars in STEM (GLASS) honors program. ",
+      imageUrl: "public/headshot.jpg"
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(400).json({
+      error: err,
+      status: 'failed to retrieve image from the database',
+    })
+  }
+})
 
 // a route to handle fetching all messages
 app.get('/messages', async (req, res) => {
